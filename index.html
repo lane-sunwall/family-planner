@@ -383,7 +383,7 @@ function updateWeekDates() {
     const formattedDate = date.toLocaleDateString('en-US', { weekday: 'long', month: 'long', day: 'numeric' });
 
     parts.push(`<h1>${day}</h1><p><strong>${formattedDate}</strong></p>`);
-    ['morning', 'afternoon', 'evening', 'chores', 'exercise', 'dinner', 'fun'].forEach(section => {
+    ['morning', 'afternoon', 'evening', 'chores', 'exercise', 'supper', 'fun'].forEach(section => {
       const el = document.getElementById(`${key}-${section}`);
       if (!el) return;
     
@@ -393,17 +393,10 @@ function updateWeekDates() {
         evening: "🌙 Evening",
         chores: "🧹 Chores",
         exercise: "💪 Exercise",
-        dinner: "🍽️ Supper",
+        supper: "🍽️ Supper",
         fun: "🎉 Fun Family Activity"
       };
-
-  const value = el.value?.trim();
-  if (value) {
-    parts.push(`<p><strong>${labelMap[section] || section}:</strong><br>${value.replace(/\n/g, "<br>")}</p>`);
-  }
-});
-
-    const html = `
+  const html = `
      <html xmlns:o='urn:schemas-microsoft-com:office:office' 
         xmlns:w='urn:schemas-microsoft-com:office:word' 
         xmlns='http://www.w3.org/TR/REC-html40'>
@@ -432,6 +425,12 @@ function updateWeekDates() {
     `;
 
     const blob = new Blob([html], { type: 'application/msword' });
+  const value = el.value?.trim();
+  if (value) {
+    parts.push(`<p><strong>${labelMap[section] || section}:</strong><br>${value.replace(/\n/g, "<br>")}</p>`);
+  }
+});
+    
     const link = document.createElement('a');
     link.href = URL.createObjectURL(blob);
 
