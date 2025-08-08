@@ -151,56 +151,6 @@
         </div>
       </div>
     </div>
-
-    <!-- Chore Template Sidebar -->
-    <div class="chore-template-box">
-      <h2>🧹 Chore Templates</h2>
-      <p>Click to autofill each day's chore section with sample tasks.</p>
-      <button class="btn" onclick="insertChoreTemplates()">Insert Example Chores</button>
-    </div>
-
-    <!-- Weekly Overview Section -->
-    <div class="planning-section">
-      <h2>📋 Weekly Overview & Goals</h2>
-      <div class="weekly-overview">
-        <div>
-          <label>Last Week's Wins 🏆</label>
-          <textarea id="lastWeekWins" rows="3" placeholder="What went well last week?"></textarea>
-        </div>
-        <div>
-          <label>This Week's Family Goals 🎯</label>
-          <textarea id="weeklyGoals" rows="3" placeholder="What do we want to focus on this week?"></textarea>
-        </div>
-        <div>
-          <label>Weekly Budget for Activities 💰</label>
-          <input type="number" id="weeklyBudget" placeholder="$0" />
-        </div>
-        <div>
-          <label>Weather Considerations 🌤️</label>
-          <textarea id="weatherNotes" rows="3" placeholder="Any weather-related plans or backup ideas?"></textarea>
-        </div>
-      </div>
-    </div>
-
-    <!-- Chore Template Script -->
-    <script>
-      function insertChoreTemplates() {
-        const choresByDay = {
-          monday: '🧺 Laundry, 🧹 Sweep kitchen',
-          tuesday: '🗑️ Take out trash, 🧽 Wipe counters',
-          wednesday: '🛏️ Change bedding, 🧼 Clean bathroom',
-          thursday: '🧺 Fold laundry, 🧽 Dust shelves',
-          friday: '🧽 Vacuum, 🧼 Mop floors',
-          saturday: '🛒 Grocery shopping, 🧺 Wash towels',
-          sunday: '🧘 Rest day, 📚 Organize books'
-        };
-
-        Object.entries(choresByDay).forEach(([day, text]) => {
-          const el = document.getElementById(`${day}-chores`);
-          if (el) el.value = text;
-        });
-      }
-    </script>
   </div>
   <div class="container">
     <div class="header">
