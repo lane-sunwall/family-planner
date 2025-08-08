@@ -341,6 +341,29 @@ function updateWeekDates() {
   const days = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'];
   const parts = [];
 
+  // Add Weekly Overview
+  const overviewSections = [
+    { id: 'lastWeekWins', label: "Last Week's Wins 🏆" },
+    { id: 'reflectionPrompt', label: "Family Reflection Prompt 🧠", isPrompt: true },
+    { id: 'weeklyReflection', label: "Reflection Response" },
+    { id: 'weeklyGoals', label: "This Week's Family Goals 🎯" },
+    { id: 'weeklyBudget', label: "Weekly Budget for Activities 💰" },
+    { id: 'weatherNotes', label: "Weather Considerations 🌤️" }
+  ];
+  
+  parts.push('<h1>📋 Weekly Overview & Goals</h1>');
+  
+  overviewSections.forEach(({ id, label, isPrompt }) => {
+    const el = document.getElementById(id);
+    if (!el) return;
+  
+    const value = isPrompt ? el.textContent : el.value;
+    if (value && value.trim()) {
+      parts.push(`<p><strong>${label}:</strong> ${value.trim()}</p>`);
+    }
+  });
+  
+  // Now continue with daily schedule
   days.forEach((day, i) => {
     const key = day.toLowerCase();
     const date = new Date(start);
