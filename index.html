@@ -237,7 +237,6 @@
     </div>
 <script>
   const familyMembers = ['Hannah', 'Benson', 'Even', 'Lane', 'Christina', 'Holly', 'Lauren'];
-  let currentActivityChooser = 0;
 
 function updateWeekDates() {
   const weekOfInput = document.getElementById('weekOf');
@@ -258,10 +257,17 @@ function updateWeekDates() {
 }
 
   function updateActivityChooser() {
-    const chooser = document.getElementById('activityChooser');
-    if (chooser) {
-      chooser.textContent = familyMembers[currentActivityChooser];
-    }
+    const input = document.getElementById("weekOf");
+    const chooser = document.getElementById("activityChooser");
+    if (!input || !input.value || !chooser) return;
+  
+    const familyOrder = ['Hannah', 'Benson', 'Even', 'Christina', 'Lane', 'Holly', 'Lauren'];
+    const startDate = new Date(input.value);
+    const baseDate = new Date("2025-01-01"); // reference Monday
+    const weekNumber = Math.floor((startDate - baseDate) / (1000 * 60 * 60 * 24 * 7));
+    const chooserIndex = weekNumber % familyOrder.length;
+  
+    chooser.textContent = familyOrder[chooserIndex];
   }
 
   function saveWeekData() {
@@ -425,8 +431,16 @@ function updateWeekDates() {
 
   document.addEventListener("DOMContentLoaded", () => {
     const input = document.getElementById("weekOf");
-    if (input) input.addEventListener("change", setWeeklyPrompt);
-    setWeeklyPrompt();
+    if (input) {
+      input.addEventListener("change", () => {
+        setWeeklyPrompt();
+        updateWeekDates();
+        updateActivityChooser();
+      });
+      setWeeklyPrompt();
+      updateWeekDates();
+      updateActivityChooser();
+    }
   });
 </script>
     <!-- Action Buttons -->
