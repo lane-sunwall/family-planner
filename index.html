@@ -78,3 +78,174 @@
     }
   </style>
 </head>
+<body>
+  <div class="container">
+    <div class="header">
+      <h1>🏡 Family Weekly Planner</h1>
+      <div class="week-info">
+        <div class="week-input">
+          <label for="weekOf">Week of:</label>
+          <input type="date" id="weekOf" onchange="updateWeekDates()" />
+        </div>
+        <div class="fun-activity-tracker">
+          🎉 Next Fun Activity Chooser: <span id="activityChooser">Hannah</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Weekly Overview Section -->
+    <div class="planning-section">
+      <h2>📋 Weekly Overview & Goals</h2>
+      <div class="weekly-overview">
+        <div>
+          <label>Last Week's Wins 🏆</label>
+          <textarea id="lastWeekWins" rows="3" placeholder="What went well last week?"></textarea>
+        </div>
+        <div>
+          <label>This Week's Family Goals 🎯</label>
+          <textarea id="weeklyGoals" rows="3" placeholder="What do we want to focus on this week?"></textarea>
+        </div>
+        <div>
+          <label>Weekly Budget for Activities 💰</label>
+          <input type="number" id="weeklyBudget" placeholder="$0" />
+        </div>
+        <div>
+          <label>Weather Considerations 🌤️</label>
+          <textarea id="weatherNotes" rows="3" placeholder="Any weather-related plans or backup ideas?"></textarea>
+        </div>
+      </div>
+    </div>
+
+    <!-- Placeholder: Day-by-day planner will go below -->
+    <!-- Daily Planning Section -->
+    <div id="dailyPlanning">
+      <!-- Loop through days -->
+      <script>
+        const daysOfWeek = [
+          "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"
+        ];
+
+        document.addEventListener("DOMContentLoaded", () => {
+          const dailyPlanningDiv = document.getElementById("dailyPlanning");
+
+          daysOfWeek.forEach((day, i) => {
+            const dayId = day.toLowerCase();
+            const isFunDay = day === "Friday" || day === "Saturday";
+
+            const dayBlock = document.createElement("div");
+            dayBlock.className = "day-planning";
+            dayBlock.innerHTML = `
+              <h3>${day} <span id="${dayId}Date"></span></h3>
+              <div>
+                <label>🌅 Morning</label>
+                <textarea id="${dayId}-morning"></textarea>
+              </div>
+              <div>
+                <label>☀️ Afternoon</label>
+                <textarea id="${dayId}-afternoon"></textarea>
+              </div>
+              <div>
+                <label>🌙 Evening</label>
+                <textarea id="${dayId}-evening"></textarea>
+              </div>
+              <div>
+                <label>🧹 Chores</label>
+                <textarea id="${dayId}-chores"></textarea>
+              </div>
+              <div>
+                <label>💪 Exercise</label>
+                <textarea id="${dayId}-exercise"></textarea>
+              </div>
+              <div>
+                <label>🍽️ Dinner</label>
+                <input type="text" id="${dayId}-dinner" />
+              </div>
+              ${isFunDay ? `
+              <div>
+                <label>🎉 Fun Family Activity</label>
+                <textarea id="${dayId}-fun"></textarea>
+              </div>` : ''}
+            `;
+            dailyPlanningDiv.appendChild(dayBlock);
+          });
+        });
+      </script>
+    </div>
+<script>
+  const familyMembers = ['Hannah', 'Benson', 'Even', 'Lane', 'Christina', 'Holly', 'Lauren'];
+  let currentActivityChooser = 0;
+
+  function updateWeekDates() {
+    const weekOfInput = document.getElementById('weekOf');
+    if (!weekOfInput || !weekOfInput.value) return;
+
+    const weekStart = new Date(weekOfInput.value);
+    const days = ['monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday', 'sunday'];
+
+    days.forEach((day, index) => {
+      const date = new Date(weekStart);
+      date.setDate(weekStart.getDate() + index);
+      const display = date.toLocaleDateString('en-US', { month: 'short', day: 'numeric' });
+      const span = document.getElementById(`${day}Date`);
+      if (span) span.textContent = display;
+    });
+  }
+
+  function updateActivityChooser() {
+    const chooser = document.getElementById('activityChooser');
+    if (chooser) {
+      chooser.textContent = familyMembers[currentActivityChooser];
+    }
+  }
+
+  function saveWeekData() {
+    const data = {
+      weekOf: document.getElementById('weekOf')?.value || '',
+      chooserIndex: currentActivityChooser
+    };
+    localStorage.setItem('familyPlannerMeta', JSON.stringify(data));
+  }
+
+  function loadWeekData() {
+    try {
+      const raw = localStorage.getItem('familyPlannerMeta');
+      if (!raw) return;
+      const saved = JSON.parse(raw);
+      if (saved.weekOf) {
+        document.getElementById('weekOf').value = saved.weekOf;
+        updateWeekDates();
+      }
+      if (saved.chooserIndex !== undefined) {
+        currentActivityChooser = saved.chooserIndex;
+        updateActivityChooser();
+      }
+    } catch (e) {
+      console.log('No prior data to load');
+    }
+  }
+
+  function planNextWeek() {
+    currentActivityChooser = (currentActivityChooser + 1) % familyMembers.length;
+    updateActivityChooser();
+
+    const inputs = document.querySelectorAll('textarea, input[type="text"]');
+    inputs.forEach(input => input.value = '');
+
+    const dateInput = document.getElementById('weekOf');
+    if (dateInput && dateInput.value) {
+      const date = new Date(dateInput.value);
+      date.setDate(date.getDate() + 7);
+      dateInput.value = date.toISOString().split('T')[0];
+    }
+
+    updateWeekDates();
+    saveWeekData();
+    alert(`🎉 ${familyMembers[currentActivityChooser]} is choosing next week’s fun activities!`);
+  }
+
+  window.addEventListener('DOMContentLoaded', () => {
+    loadWeekData();
+    updateActivityChooser();
+    updateWeekDates();
+  });
+</script>
