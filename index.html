@@ -382,15 +382,25 @@ function updateWeekDates() {
     const formattedDate = date.toLocaleDateString('en-US', { weekday: 'long', month: 'long', day: 'numeric' });
 
     parts.push(`<h1>${day}</h1><p><strong>${formattedDate}</strong></p>`);
-    ['morning', 'afternoon', 'evening', 'chores', 'exercise', 'supper', 'fun'].forEach(section => {
+    ['morning', 'afternoon', 'evening', 'chores', 'exercise', 'dinner', 'fun'].forEach(section => {
       const el = document.getElementById(`${key}-${section}`);
-      if (el && el.value) {
-        const label = section.charAt(0).toUpperCase() + section.slice(1);
-        parts.push(`<p><strong>${label}:</strong> ${el.value}</p>`);
-      }
-    });
-    parts.push(`<hr/>`);
-  });
+      if (!el) return;
+    
+      const labelMap = {
+        morning: "🌅 Morning",
+        afternoon: "☀️ Afternoon",
+        evening: "🌙 Evening",
+        chores: "🧹 Chores",
+        exercise: "💪 Exercise",
+        dinner: "🍽️ Supper",
+        fun: "🎉 Fun Family Activity"
+      };
+
+  const value = el.value?.trim();
+  if (value) {
+    parts.push(`<p><strong>${labelMap[section] || section}:</strong><br>${value.replace(/\n/g, "<br>")}</p>`);
+  }
+});
 
     const html = `
      <html xmlns:o='urn:schemas-microsoft-com:office:office' 
