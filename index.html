@@ -298,21 +298,27 @@
   const familyMembers = ['Hannah', 'Benson', 'Even', 'Lane', 'Christina', 'Holly', 'Lauren'];
   let currentActivityChooser = 0;
 
-  function updateWeekDates() {
-    const weekOfInput = document.getElementById('weekOf');
-    if (!weekOfInput || !weekOfInput.value) return;
+function updateWeekDates() {
+  const weekOfInput = document.getElementById('weekOf');
+  if (!weekOfInput || !weekOfInput.value) return;
 
-    const weekStart = new Date(weekOfInput.value);
-    const days = ['monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday', 'sunday'];
+  const selectedDate = new Date(weekOfInput.value);
+  const selectedDay = selectedDate.getDay(); // 0 = Sunday, 1 = Monday, ..., 6 = Saturday
 
-    days.forEach((day, index) => {
-      const date = new Date(weekStart);
-      date.setDate(weekStart.getDate() + index);
-      const display = date.toLocaleDateString('en-US', { month: 'short', day: 'numeric' });
-      const span = document.getElementById(`${day}Date`);
-      if (span) span.textContent = display;
-    });
-  }
+  // Calculate the Monday of the selected week
+  const monday = new Date(selectedDate);
+  const offset = (selectedDay + 6) % 7; // ensures Monday is 0, Sunday is 6
+  monday.setDate(selectedDate.getDate() - offset);
+
+  const days = ['monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday', 'sunday'];
+  days.forEach((day, index) => {
+    const date = new Date(monday);
+    date.setDate(monday.getDate() + index);
+    const display = date.toLocaleDateString('en-US', { month: 'short', day: 'numeric' });
+    const span = document.getElementById(`${day}Date`);
+    if (span) span.textContent = display;
+  });
+}
 
   function updateActivityChooser() {
     const chooser = document.getElementById('activityChooser');
