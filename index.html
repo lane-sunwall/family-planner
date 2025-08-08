@@ -239,7 +239,8 @@ function updateWeekDates() {
   if (!weekOfInput || !weekOfInput.value) return;
 
   // Always treat selected date as Monday
-  const monday = new Date(weekOfInput.value);
+  const [year, month, day] = weekOfInput.value.split('-').map(Number);
+  const monday = new Date(year, month - 1, day);
 
   const days = ['monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday', 'sunday'];
   days.forEach((day, index) => {
