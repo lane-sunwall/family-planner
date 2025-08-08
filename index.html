@@ -221,23 +221,23 @@
               <h3>${day} <span id="${dayId}Date"></span></h3>
               <div>
                 <label>🌅 Morning</label>
-                <textarea id="${dayId}-morning"></textarea>
+                <textarea id="${dayId}-morning">${defaultCheckboxes}</textarea>
               </div>
               <div>
                 <label>☀️ Afternoon</label>
-                <textarea id="${dayId}-afternoon"></textarea>
+                <textarea id="${dayId}-afternoon">${defaultCheckboxes}</textarea>
               </div>
               <div>
                 <label>🌙 Evening</label>
-                <textarea id="${dayId}-evening"></textarea>
+                <textarea id="${dayId}-evening">${defaultCheckboxes}</textarea>
               </div>
               <div>
                 <label>🧹 Chores</label>
-                <textarea id="${dayId}-chores"></textarea>
+                <textarea id="${dayId}-chores">${choresText}</textarea>
               </div>
               <div>
                 <label>💪 Exercise</label>
-                <textarea id="${dayId}-exercise"></textarea>
+                <textarea id="${dayId}-exercise">${defaultCheckboxes}</textarea>
               </div>
               <div>
                 <label>🍽️ Supper</label>
@@ -246,7 +246,7 @@
               ${isFunDay ? `
               <div>
                 <label>🎉 Fun Family Activity</label>
-                <textarea id="${dayId}-fun"></textarea>
+                <textarea id="${dayId}-fun">${defaultCheckboxes}</textarea>
               </div>` : ''}
             `;
             dailyPlanningDiv.appendChild(dayBlock);
