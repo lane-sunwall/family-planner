@@ -208,7 +208,8 @@
             const isFunDay = day === "Friday" || day === "Saturday";
 
             const defaultCheckboxes = "☐\n☐\n☐\n☐";
-
+            const dayBlock = document.createElement("div");
+            dayBlock.className = "day-planning";
             let choresText = defaultCheckboxes;
             if (["Monday", "Wednesday", "Friday"].includes(day)) {
               choresText = "☐ Hannah - empty dishwasher\n☐ Hannah - set table for supper\n☐\n☐";
