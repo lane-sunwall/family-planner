@@ -207,8 +207,15 @@
             const dayId = day.toLowerCase();
             const isFunDay = day === "Friday" || day === "Saturday";
 
-            const dayBlock = document.createElement("div");
-            dayBlock.className = "day-planning";
+            const defaultCheckboxes = "☐\n☐\n☐\n☐";
+
+            let choresText = defaultCheckboxes;
+            if (["Monday", "Wednesday", "Friday"].includes(day)) {
+              choresText = "☐ Hannah - empty dishwasher\n☐ Hannah - set table for supper\n☐\n☐";
+            } else if (["Tuesday", "Thursday", "Saturday"].includes(day)) {
+              choresText = "☐ Benson - empty dishwasher\n☐ Benson - set table for supper\n☐\n☐";
+            }
+
             dayBlock.innerHTML = `
               <h3>${day} <span id="${dayId}Date"></span></h3>
               <div>
@@ -232,8 +239,8 @@
                 <textarea id="${dayId}-exercise"></textarea>
               </div>
               <div>
-                <label>🍽️ Dinner</label>
-                <input type="text" id="${dayId}-dinner" />
+                <label>🍽️ Supper</label>
+                <input type="text" id="${dayId}-supper" />
               </div>
               ${isFunDay ? `
               <div>
@@ -375,7 +382,7 @@ function updateWeekDates() {
     const formattedDate = date.toLocaleDateString('en-US', { weekday: 'long', month: 'long', day: 'numeric' });
 
     parts.push(`<h1>${day}</h1><p><strong>${formattedDate}</strong></p>`);
-    ['morning', 'afternoon', 'evening', 'chores', 'exercise', 'dinner', 'fun'].forEach(section => {
+    ['morning', 'afternoon', 'evening', 'chores', 'exercise', 'supper', 'fun'].forEach(section => {
       const el = document.getElementById(`${key}-${section}`);
       if (el && el.value) {
         const label = section.charAt(0).toUpperCase() + section.slice(1);
