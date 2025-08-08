@@ -31,11 +31,7 @@
       margin-bottom: 10px;
       padding: 10px;
       border-radius: 8px;
-      border: none;
-      outline: none;
-      background: transparent;
-      box-shadow: none;
-      resize: none;
+      border: 1px solid #ccc;
     }
     textarea {
       resize: vertical;
@@ -141,21 +137,9 @@
         overflow: visible !important;
         height: auto !important;
         min-height: 1em;
-        background: transparent;
-
       }
       textarea {
         white-space: pre-wrap;
-        height: auto !important;
-        min-height: 2em;
-        overflow: visible !important;
-        display: block;
-        box-sizing: border-box;
-        padding: 0;
-        margin: 0;
-        font-size: 11pt;
-        line-height: 1.4;
-      }
       }
       .day-planning, .planning-section {
         page-break-inside: avoid;
@@ -398,7 +382,28 @@ function updateWeekDates() {
     date.setDate(start.getDate() + i);
     const formattedDate = date.toLocaleDateString('en-US', { weekday: 'long', month: 'long', day: 'numeric' });
 
-const html = `
+    parts.push(`<h1>${day}</h1><p><strong>${formattedDate}</strong></p>`);
+    ['morning', 'afternoon', 'evening', 'chores', 'exercise', 'dinner', 'fun'].forEach(section => {
+      const el = document.getElementById(`${key}-${section}`);
+      if (!el) return;
+    
+      const labelMap = {
+        morning: "🌅 Morning",
+        afternoon: "☀️ Afternoon",
+        evening: "🌙 Evening",
+        chores: "🧹 Chores",
+        exercise: "💪 Exercise",
+        dinner: "🍽️ Supper",
+        fun: "🎉 Fun Family Activity"
+      };
+
+  const value = el.value?.trim();
+  if (value) {
+    parts.push(`<p><strong>${labelMap[section] || section}:</strong><br>${value.replace(/\n/g, "<br>")}</p>`);
+  }
+});
+
+    const html = `
      <html xmlns:o='urn:schemas-microsoft-com:office:office' 
         xmlns:w='urn:schemas-microsoft-com:office:word' 
         xmlns='http://www.w3.org/TR/REC-html40'>
@@ -425,27 +430,6 @@ const html = `
       <body>${parts.join('')}</body>
     </html>
     `;
-    
-    parts.push(`<h1>${day}</h1><p><strong>${formattedDate}</strong></p>`);
-    ['morning', 'afternoon', 'evening', 'chores', 'exercise', 'dinner', 'fun'].forEach(section => {
-      const el = document.getElementById(`${key}-${section}`);
-      if (!el) return;
-    
-      const labelMap = {
-        morning: "🌅 Morning",
-        afternoon: "☀️ Afternoon",
-        evening: "🌙 Evening",
-        chores: "🧹 Chores",
-        exercise: "💪 Exercise",
-        dinner: "🍽️ Supper",
-        fun: "🎉 Fun Family Activity"
-      };
-
-  const value = el.value?.trim();
-  if (value) {
-    parts.push(`<p><strong>${labelMap[section] || section}:</strong><br>${value.replace(/\n/g, "<br>")}</p>`);
-  }
-});
 
     const blob = new Blob([html], { type: 'application/msword' });
     const link = document.createElement('a');
