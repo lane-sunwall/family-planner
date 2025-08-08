@@ -249,3 +249,75 @@
     updateWeekDates();
   });
 </script>
+<script>
+  function generateWordDoc() {
+    const weekStart = document.getElementById('weekOf').value;
+    if (!weekStart) {
+      alert("Please select a 'Week Of' date first.");
+      return;
+    }
+
+    const start = new Date(weekStart);
+    const days = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'];
+    const parts = [];
+
+    days.forEach((day, i) => {
+      const key = day.toLowerCase();
+      const date = new Date(start);
+      date.setDate(start.getDate() + i);
+      const formattedDate = date.toLocaleDateString('en-US', { weekday: 'long', month: 'long', day: 'numeric' });
+
+      parts.push(`<h1>${day}</h1><p><strong>${formattedDate}</strong></p>`);
+      ['morning', 'afternoon', 'evening', 'chores', 'exercise', 'dinner', 'fun'].forEach(section => {
+        const el = document.getElementById(`${key}-${section}`);
+        if (el && el.value) {
+          const label = section.charAt(0).toUpperCase() + section.slice(1);
+          parts.push(`<p><strong>${label}:</strong> ${el.value}</p>`);
+        }
+      });
+      parts.push(`<hr/>`);
+    });
+
+    const html = `
+      <html xmlns:o='urn:schemas-microsoft-com:office:office' 
+            xmlns:w='urn:schemas-microsoft-com:office:word' 
+            xmlns='http://www.w3.org/TR/REC-html40'>
+      <head><meta charset='utf-8'><title>Family Planner</title></head>
+      <body>${parts.join('')}</body>
+      </html>
+    `;
+
+    const blob = new Blob([html], { type: 'application/msword' });
+    const link = document.createElement('a');
+    link.href = URL.createObjectURL(blob);
+
+    const weekLabel = new Date(weekStart).toLocaleDateString('en-US', { month: 'short', day: 'numeric' });
+    link.download = `Family-Planner-Week-${weekLabel}.doc`;
+
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+  }
+</script>
+    <!-- Mood and Reflection Toggles -->
+    <div class="optional-section">
+      <h2>🧠 Optional Mood Check-Ins and Reflections</h2>
+      <div id="optionalPrompts">
+        <p><strong>How was your week emotionally?</strong></p>
+        <label><input type="radio" name="mood" value="happy" /> 😊 Happy</label>
+        <label><input type="radio" name="mood" value="neutral" /> 😐 Okay</label>
+        <label><input type="radio" name="mood" value="sad" /> 😞 Rough</label>
+
+        <p><strong>Something I learned or want to remember:</strong></p>
+        <textarea rows="4" placeholder="Write your weekly reflections here..."></textarea>
+      </div>
+    </div>
+
+    <!-- Action Buttons -->
+    <div style="margin: 40px 0; text-align: center;">
+      <button class="btn" onclick="generateWordDoc()">📄 Export to Word</button>
+      <button class="btn" onclick="planNextWeek()">🔄 Plan Next Week</button>
+    </div>
+  </div> <!-- Close .container -->
+</body>
+</html>
