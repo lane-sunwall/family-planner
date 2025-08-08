@@ -316,33 +316,34 @@ function updateWeekDates() {
   });
 </script>
 <script>
-  function generateWordDoc() {
-    const weekStart = document.getElementById('weekOf').value;
-    if (!weekStart) {
-      alert("Please select a 'Week Of' date first.");
-      return;
-    }
+ function generateWordDoc() {
+  const weekStart = document.getElementById('weekOf').value;
+  if (!weekStart) {
+    alert("Please select a 'Week Of' date first.");
+    return;
+  }
 
-    const start = new Date(weekStart);
-    const days = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'];
-    const parts = [];
+  const [year, month, day] = weekStart.split('-').map(Number);
+  const start = new Date(year, month - 1, day); // Always treat as Monday
+  const days = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'];
+  const parts = [];
 
-    days.forEach((day, i) => {
-      const key = day.toLowerCase();
-      const date = new Date(start);
-      date.setDate(start.getDate() + i);
-      const formattedDate = date.toLocaleDateString('en-US', { weekday: 'long', month: 'long', day: 'numeric' });
+  days.forEach((day, i) => {
+    const key = day.toLowerCase();
+    const date = new Date(start);
+    date.setDate(start.getDate() + i);
+    const formattedDate = date.toLocaleDateString('en-US', { weekday: 'long', month: 'long', day: 'numeric' });
 
-      parts.push(`<h1>${day}</h1><p><strong>${formattedDate}</strong></p>`);
-      ['morning', 'afternoon', 'evening', 'chores', 'exercise', 'dinner', 'fun'].forEach(section => {
-        const el = document.getElementById(`${key}-${section}`);
-        if (el && el.value) {
-          const label = section.charAt(0).toUpperCase() + section.slice(1);
-          parts.push(`<p><strong>${label}:</strong> ${el.value}</p>`);
-        }
-      });
-      parts.push(`<hr/>`);
+    parts.push(`<h1>${day}</h1><p><strong>${formattedDate}</strong></p>`);
+    ['morning', 'afternoon', 'evening', 'chores', 'exercise', 'dinner', 'fun'].forEach(section => {
+      const el = document.getElementById(`${key}-${section}`);
+      if (el && el.value) {
+        const label = section.charAt(0).toUpperCase() + section.slice(1);
+        parts.push(`<p><strong>${label}:</strong> ${el.value}</p>`);
+      }
     });
+    parts.push(`<hr/>`);
+  });
 
     const html = `
      <html xmlns:o='urn:schemas-microsoft-com:office:office' 
