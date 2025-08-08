@@ -341,7 +341,7 @@ function updateWeekDates() {
   });
 </script>
 <script>
- function generateWordDoc() {
+function generateWordDoc() {
   const weekStart = document.getElementById('weekOf').value;
   if (!weekStart) {
     alert("Please select a 'Week Of' date first.");
@@ -353,7 +353,9 @@ function updateWeekDates() {
   const days = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'];
   const parts = [];
 
-  // Add Weekly Overview
+  // Weekly Overview
+  parts.push('<h1>📋 Weekly Overview & Goals</h1>');
+
   const overviewSections = [
     { id: 'lastWeekWins', label: "Last Week's Wins 🏆" },
     { id: 'reflectionPrompt', label: "Family Reflection Prompt 🧠", isPrompt: true },
@@ -362,98 +364,92 @@ function updateWeekDates() {
     { id: 'weeklyBudget', label: "Weekly Budget for Activities 💰" },
     { id: 'weatherNotes', label: "Weather Considerations 🌤️" }
   ];
-  
-  parts.push('<h1>📋 Weekly Overview & Goals</h1>');
-  
+
   overviewSections.forEach(({ id, label, isPrompt }) => {
     const el = document.getElementById(id);
     if (!el) return;
-  
     const value = isPrompt ? el.textContent : el.value;
     if (value && value.trim()) {
       parts.push(`<p><strong>${label}:</strong> ${value.trim()}</p>`);
     }
   });
-  
-  // Now continue with daily schedule
+
+  // Daily Planner Sections
   days.forEach((day, i) => {
     const key = day.toLowerCase();
     const date = new Date(start);
     date.setDate(start.getDate() + i);
-    const formattedDate = date.toLocaleDateString('en-US', { weekday: 'long', month: 'long', day: 'numeric' });
+    const formattedDate = date.toLocaleDateString('en-US', {
+      weekday: 'long',
+      month: 'long',
+      day: 'numeric'
+    });
 
     parts.push(`<h1>${day}</h1><p><strong>${formattedDate}</strong></p>`);
+
+    const labelMap = {
+      morning: "🌅 Morning",
+      afternoon: "☀️ Afternoon",
+      evening: "🌙 Evening",
+      chores: "🧹 Chores",
+      exercise: "💪 Exercise",
+      supper: "🍽️ Supper",
+      fun: "🎉 Fun Family Activity"
+    };
+
     ['morning', 'afternoon', 'evening', 'chores', 'exercise', 'supper', 'fun'].forEach(section => {
       const el = document.getElementById(`${key}-${section}`);
       if (!el) return;
-    
-      const labelMap = {
-        morning: "🌅 Morning",
-        afternoon: "☀️ Afternoon",
-        evening: "🌙 Evening",
-        chores: "🧹 Chores",
-        exercise: "💪 Exercise",
-        supper: "🍽️ Supper",
-        fun: "🎉 Fun Family Activity"
-      };
-  
+      const value = el.value?.trim();
+      if (value) {
+        parts.push(`<p><strong>${labelMap[section] || section}:</strong><br>${value.replace(/\n/g, "<br>")}</p>`);
+      }
+    });
+  });
+
+  // Word document styling and export
+  const html = `
+    <html xmlns:o='urn:schemas-microsoft-com:office:office' 
+          xmlns:w='urn:schemas-microsoft-com:office:word' 
+          xmlns='http://www.w3.org/TR/REC-html40'>
+      <head>
+        <meta charset='utf-8'>
+        <title>Family Planner</title>
+        <style>
+          @page {
+            margin: 0.7in;
+          }
+          body {
+            font-family: "Calibri", sans-serif;
+            font-size: 11pt;
+          }
+          h1 {
+            font-size: 16pt;
+            margin-bottom: 0.2in;
+          }
+          p {
+            margin-bottom: 0.1in;
+          }
+        </style>
+      </head>
+      <body>${parts.join('')}</body>
+    </html>
+  `;
 
   const blob = new Blob([html], { type: 'application/msword' });
-  const value = el.value?.trim();
-  if (value) {
-    parts.push(`<p><strong>${labelMap[section] || section}:</strong><br>${value.replace(/\n/g, "<br>")}</p>`);
-  }
-});
-    const html = `
-  <html xmlns:o='urn:schemas-microsoft-com:office:office' 
-        xmlns:w='urn:schemas-microsoft-com:office:word' 
-        xmlns='http://www.w3.org/TR/REC-html40'>
-    <head>
-      <meta charset='utf-8'>
-      <title>Family Planner</title>
-      <style>
-        @page {
-          margin: 0.7in;
-        }
-        body {
-          font-family: "Calibri", sans-serif;
-          font-size: 11pt;
-        }
-        h1 {
-          font-size: 16pt;
-          margin-bottom: 0.2in;
-        }
-        p {
-          margin-bottom: 0.1in;
-        }
-      </style>
-    </head>
-    <body>${parts.join('')}</body>
-  </html>
-`;
-
-const blob = new Blob([html], { type: 'application/msword' });
-const link = document.createElement('a');
-link.href = URL.createObjectURL(blob);
-
-const weekLabel = new Date(weekStart).toLocaleDateString('en-US', { month: 'short', day: 'numeric' });
-link.download = `Family-Planner-Week-${weekLabel}.doc`;
-
-document.body.appendChild(link);
-link.click();
-document.body.removeChild(link);
-    const link = document.createElement('a');
-    link.href = URL.createObjectURL(blob);
-
-    const weekLabel = new Date(weekStart).toLocaleDateString('en-US', { month: 'short', day: 'numeric' });
-    link.download = `Family-Planner-Week-${weekLabel}.doc`;
-
-    document.body.appendChild(link);
-    link.click();
-    document.body.removeChild(link);
-  }
-
+  const link = document.createElement('a');
+  link.href = URL.createObjectURL(blob);
+  const weekLabel = new Date(weekStart).toLocaleDateString('en-US', {
+    month: 'short', day: 'numeric'
+  });
+  link.download = `Family-Planner-Week-${weekLabel}.doc`;
+  document.body.appendChild(link);
+  link.click();
+  document.body.removeChild(link);
+}
 </script>
+
+  
     <script>
   const reflectionPrompts = [
     "What was the best part of your week?",
