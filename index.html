@@ -118,7 +118,7 @@
       }
       .container {
         max-width: 100%;
-        padding: 0.5in 0.7in; /* top-bottom: 0.5in, sides: 0.7in */
+        padding: 0.5in 0.7in;
       }
       .btn,
       .chore-template-box,
@@ -133,11 +133,15 @@
         box-shadow: none;
         background: transparent;
         font-size: 11pt;
+        width: 100%;
+        overflow: visible !important;
+        height: auto !important;
+        min-height: 1em;
       }
-      h1, h2, h3 {
-        color: black;
+      textarea {
+        white-space: pre-wrap;
       }
-      .day-planning {
+      .day-planning, .planning-section {
         page-break-inside: avoid;
         margin-bottom: 20px;
       }
