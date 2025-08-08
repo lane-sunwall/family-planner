@@ -1,4 +1,3 @@
-<!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
@@ -27,9 +26,19 @@
     input, textarea {
       font-family: inherit;
       font-size: 1rem;
+      width: 100%;
+      margin-bottom: 10px;
+      padding: 10px;
+      border-radius: 8px;
+      border: 1px solid #ccc;
+    }
+    textarea {
+      resize: vertical;
     }
     label {
       font-weight: bold;
+      display: block;
+      margin: 10px 0 5px;
     }
     .header {
       background: white;
@@ -71,14 +80,127 @@
       font-size: 16px;
       font-weight: bold;
       transition: all 0.3s ease;
+      margin: 5px;
     }
     .btn:hover {
       transform: translateY(-2px);
       box-shadow: 0 5px 15px rgba(0,0,0,0.2);
     }
+    .day-planning {
+      background: white;
+      border-radius: 10px;
+      padding: 20px;
+      margin-bottom: 25px;
+      box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+    }
+    .optional-section {
+      background: #f0f4f8;
+      border-radius: 10px;
+      padding: 20px;
+      margin-top: 30px;
+    }
+    .chore-template-box {
+      background: #fff;
+      border: 1px solid #ccc;
+      border-radius: 10px;
+      padding: 15px;
+      margin: 20px 0;
+    }
+
+    /* Print mode */
+    @media print {
+      body {
+        background: white;
+        color: black;
+      }
+      .btn,
+      .chore-template-box,
+      .fun-activity-tracker,
+      .header {
+        display: none !important;
+      }
+      input, textarea {
+        border: none;
+        outline: none;
+        resize: none;
+        box-shadow: none;
+        background: transparent;
+      }
+      .container {
+        max-width: 100%;
+        padding: 0 20px;
+      }
+      .day-planning {
+        page-break-inside: avoid;
+      }
+    }
   </style>
 </head>
 <body>
+  <div class="container">
+    <div class="header">
+      <h1>🏡 Family Weekly Planner</h1>
+      <div class="week-info">
+        <div class="week-input">
+          <label for="weekOf">Week of:</label>
+          <input type="date" id="weekOf" onchange="updateWeekDates()" />
+        </div>
+        <div class="fun-activity-tracker">
+          🎉 Next Fun Activity Chooser: <span id="activityChooser">Hannah</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Chore Template Sidebar -->
+    <div class="chore-template-box">
+      <h2>🧹 Chore Templates</h2>
+      <p>Click to autofill each day's chore section with sample tasks.</p>
+      <button class="btn" onclick="insertChoreTemplates()">Insert Example Chores</button>
+    </div>
+
+    <!-- Weekly Overview Section -->
+    <div class="planning-section">
+      <h2>📋 Weekly Overview & Goals</h2>
+      <div class="weekly-overview">
+        <div>
+          <label>Last Week's Wins 🏆</label>
+          <textarea id="lastWeekWins" rows="3" placeholder="What went well last week?"></textarea>
+        </div>
+        <div>
+          <label>This Week's Family Goals 🎯</label>
+          <textarea id="weeklyGoals" rows="3" placeholder="What do we want to focus on this week?"></textarea>
+        </div>
+        <div>
+          <label>Weekly Budget for Activities 💰</label>
+          <input type="number" id="weeklyBudget" placeholder="$0" />
+        </div>
+        <div>
+          <label>Weather Considerations 🌤️</label>
+          <textarea id="weatherNotes" rows="3" placeholder="Any weather-related plans or backup ideas?"></textarea>
+        </div>
+      </div>
+    </div>
+
+    <!-- Chore Template Script -->
+    <script>
+      function insertChoreTemplates() {
+        const choresByDay = {
+          monday: '🧺 Laundry, 🧹 Sweep kitchen',
+          tuesday: '🗑️ Take out trash, 🧽 Wipe counters',
+          wednesday: '🛏️ Change bedding, 🧼 Clean bathroom',
+          thursday: '🧺 Fold laundry, 🧽 Dust shelves',
+          friday: '🧽 Vacuum, 🧼 Mop floors',
+          saturday: '🛒 Grocery shopping, 🧺 Wash towels',
+          sunday: '🧘 Rest day, 📚 Organize books'
+        };
+
+        Object.entries(choresByDay).forEach(([day, text]) => {
+          const el = document.getElementById(`${day}-chores`);
+          if (el) el.value = text;
+        });
+      }
+    </script>
+  </div>
   <div class="container">
     <div class="header">
       <h1>🏡 Family Weekly Planner</h1>
