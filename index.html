@@ -430,7 +430,44 @@ function updateWeekDates() {
     parts.push(`<p><strong>${labelMap[section] || section}:</strong><br>${value.replace(/\n/g, "<br>")}</p>`);
   }
 });
-    
+    const html = `
+  <html xmlns:o='urn:schemas-microsoft-com:office:office' 
+        xmlns:w='urn:schemas-microsoft-com:office:word' 
+        xmlns='http://www.w3.org/TR/REC-html40'>
+    <head>
+      <meta charset='utf-8'>
+      <title>Family Planner</title>
+      <style>
+        @page {
+          margin: 0.7in;
+        }
+        body {
+          font-family: "Calibri", sans-serif;
+          font-size: 11pt;
+        }
+        h1 {
+          font-size: 16pt;
+          margin-bottom: 0.2in;
+        }
+        p {
+          margin-bottom: 0.1in;
+        }
+      </style>
+    </head>
+    <body>${parts.join('')}</body>
+  </html>
+`;
+
+const blob = new Blob([html], { type: 'application/msword' });
+const link = document.createElement('a');
+link.href = URL.createObjectURL(blob);
+
+const weekLabel = new Date(weekStart).toLocaleDateString('en-US', { month: 'short', day: 'numeric' });
+link.download = `Family-Planner-Week-${weekLabel}.doc`;
+
+document.body.appendChild(link);
+link.click();
+document.body.removeChild(link);
     const link = document.createElement('a');
     link.href = URL.createObjectURL(blob);
 
