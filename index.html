@@ -161,6 +161,11 @@
           <textarea id="lastWeekWins" rows="3" placeholder="What went well last week?"></textarea>
         </div>
         <div>
+          <label>🧠 Family Reflection Prompt</label>
+          <p id="reflectionPrompt" style="font-weight: bold; font-size: 1.05em; margin: 5px 0;"></p>
+          <textarea id="weeklyReflection" rows="3" placeholder="Write your thoughts here..."></textarea>
+        </div>
+        <div>
           <label>This Week's Family Goals 🎯</label>
           <textarea id="weeklyGoals" rows="3" placeholder="What do we want to focus on this week?"></textarea>
         </div>
@@ -359,21 +364,51 @@ function updateWeekDates() {
     link.click();
     document.body.removeChild(link);
   }
+
 </script>
-    <!-- Mood and Reflection Toggles -->
-    <div class="optional-section">
-      <h2>🧠 Optional Mood Check-Ins and Reflections</h2>
-      <div id="optionalPrompts">
-        <p><strong>How was your week emotionally?</strong></p>
-        <label><input type="radio" name="mood" value="happy" /> 😊 Happy</label>
-        <label><input type="radio" name="mood" value="neutral" /> 😐 Okay</label>
-        <label><input type="radio" name="mood" value="sad" /> 😞 Rough</label>
+    <script>
+  const reflectionPrompts = [
+    "What was the best part of your week?",
+    "What was the hardest thing you had to do this week?",
+    "What’s something that made you laugh this week?",
+    "What’s one thing you’re thankful for right now?",
+    "What’s something new you tried (or want to try)?",
+    "What made you feel proud this week?",
+    "Did anything make you feel frustrated or annoyed?",
+    "What was your favorite moment with family this week?",
+    "What’s one thing you learned this week?",
+    "If this week were a weather forecast, what would it be?",
+    "Who helped you this week, and how?",
+    "What’s one thing you wish had gone differently this week?",
+    "What was your energy like most of the week — high, low, or in-between?",
+    "What made you feel loved or appreciated?",
+    "What’s something you’re looking forward to next week?",
+    "If this week had a soundtrack, what song would be on it?",
+    "What’s one thing you’d like to do better next week?",
+    "What’s something that surprised you this week?",
+    "What’s a small moment you want to remember?",
+    "If you could give your week a title, what would it be?"
+  ];
 
-        <p><strong>Something I learned or want to remember:</strong></p>
-        <textarea rows="4" placeholder="Write your weekly reflections here..."></textarea>
-      </div>
-    </div>
+  function setWeeklyPrompt() {
+    const input = document.getElementById("weekOf");
+    if (!input || !input.value) return;
 
+    const startDate = new Date(input.value);
+    const baseDate = new Date("2025-01-01");
+    const weekNumber = Math.floor((startDate - baseDate) / (1000 * 60 * 60 * 24 * 7));
+    const promptIndex = weekNumber % reflectionPrompts.length;
+
+    const promptEl = document.getElementById("reflectionPrompt");
+    if (promptEl) promptEl.textContent = reflectionPrompts[promptIndex];
+  }
+
+  document.addEventListener("DOMContentLoaded", () => {
+    const input = document.getElementById("weekOf");
+    if (input) input.addEventListener("change", setWeeklyPrompt);
+    setWeeklyPrompt();
+  });
+</script>
     <!-- Action Buttons -->
     <div style="margin: 40px 0; text-align: center;">
       <button class="btn" onclick="generateWordDoc()">📄 Export to Word</button>
